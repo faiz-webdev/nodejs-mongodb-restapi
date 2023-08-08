@@ -1,5 +1,6 @@
 const { dbConnection } = require("./config/dbConnection");
 require("dotenv").config();
+const brandRouter = require("./routes/Brand");
 
 const express = require("express");
 const server = express();
@@ -17,8 +18,9 @@ function startServer() {
   );
 
   server.use(express.json()); // to parse req.body
+  server.use("/brand", brandRouter.router);
 
-  dbConnection()
+  dbConnection();
 
   server.listen(8080, () => {
     console.log("server started");
