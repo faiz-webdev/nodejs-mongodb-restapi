@@ -1,8 +1,8 @@
 const { dbConnection } = require("./config/dbConnection");
 require("dotenv").config();
-const brandRouter = require("./routes/Brand");
-
+const { routeConfig } = require("./config/ExpressApp");
 const express = require("express");
+
 const server = express();
 const cors = require("cors");
 
@@ -10,7 +10,7 @@ server.get("/", (req, res) => {
   res.json({ status: "success" });
 });
 
-function startServer() {
+async function startServer() {
   server.use(
     cors({
       exposedHeaders: ["X-Total-Count"],
@@ -18,12 +18,14 @@ function startServer() {
   );
 
   server.use(express.json()); // to parse req.body
-  server.use("/brand", brandRouter.router);
+  // server.use("/brand", brandRouter.router);
+  // await routeConfig(server);
+  await routeConfig(server);
 
-  dbConnection();
+  await dbConnection();
 
-  server.listen(8080, () => {
-    console.log("server started");
+  server.listen(process.env.PORT, () => {
+    console.log("server started " + process.env.PORT);
   });
 }
 
